@@ -12,33 +12,36 @@ import (
 
 // Names of the various topologies.
 const (
-	Endpoint       = "endpoint"
-	Process        = "process"
-	Container      = "container"
-	Pod            = "pod"
-	Service        = "service"
-	Deployment     = "deployment"
-	ReplicaSet     = "replica_set"
-	DaemonSet      = "daemon_set"
-	StatefulSet    = "stateful_set"
-	CronJob        = "cron_job"
-	Namespace      = "namespace"
-	ContainerImage = "container_image"
-	Host           = "host"
-	Overlay        = "overlay"
-	ECSService     = "ecs_service"
-	ECSTask        = "ecs_task"
-	SwarmService   = "swarm_service"
+	Endpoint              = "endpoint"
+	Process               = "process"
+	Container             = "container"
+	Pod                   = "pod"
+	Service               = "service"
+	Deployment            = "deployment"
+	ReplicaSet            = "replica_set"
+	DaemonSet             = "daemon_set"
+	StatefulSet           = "stateful_set"
+	CronJob               = "cron_job"
+	Namespace             = "namespace"
+	PersistentVolumeClaim = "persistent_volume_claim"
+	ContainerImage        = "container_image"
+	Host                  = "host"
+	Overlay               = "overlay"
+	ECSService            = "ecs_service"
+	ECSTask               = "ecs_task"
+	SwarmService          = "swarm_service"
 
 	// Shapes used for different nodes
-	Circle   = "circle"
-	Triangle = "triangle"
-	Square   = "square"
-	Pentagon = "pentagon"
-	Hexagon  = "hexagon"
-	Heptagon = "heptagon"
-	Octagon  = "octagon"
-	Cloud    = "cloud"
+	Circle         = "circle"
+	Triangle       = "triangle"
+	Square         = "square"
+	Pentagon       = "pentagon"
+	Hexagon        = "hexagon"
+	Heptagon       = "heptagon"
+	Octagon        = "octagon"
+	Cloud          = "cloud"
+	Cylinder       = "cylinder"
+	DottedCylinder = "dottedcylinder"
 
 	// Used when counting the number of containers
 	ContainersKey = "containers"
@@ -58,6 +61,7 @@ var topologyNames = []string{
 	StatefulSet,
 	CronJob,
 	Namespace,
+	PersistentVolumeClaim,
 	Host,
 	Overlay,
 	ECSTask,
