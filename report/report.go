@@ -126,6 +126,10 @@ type Report struct {
 	// present.
 	Namespace Topology
 
+	// Persistent Volume Claim nodes represent all Kubernetes Persistent Volume Claims running on hosts running probes.
+	// Metadata is limited for now, more to come later.
+	PersistentVolumeClaim Topology
+
 	// ContainerImages nodes represent all Docker containers images on
 	// hosts running probes. Metadata includes things like image id, name etc.
 	// Edges are not present.
@@ -268,7 +272,9 @@ func (r Report) Copy() Report {
 		ID:       fmt.Sprintf("%d", rand.Int63()),
 	}
 	newReport.WalkPairedTopologies(&r, func(newTopology, oldTopology *Topology) {
-		*newTopology = oldTopology.Copy()
+		if oldTopology != nil && newTopology != nil {
+			*newTopology = oldTopology.Copy()
+		}
 	})
 	return newReport
 }
@@ -282,7 +288,9 @@ func (r Report) Merge(other Report) Report {
 	newReport.Window = newReport.Window + other.Window
 	newReport.Plugins = newReport.Plugins.Merge(other.Plugins)
 	newReport.WalkPairedTopologies(&other, func(ourTopology, theirTopology *Topology) {
-		*ourTopology = ourTopology.Merge(*theirTopology)
+		if ourTopology != nil && theirTopology != nil {
+			*ourTopology = ourTopology.Merge(*theirTopology)
+		}
 	})
 	return newReport
 }
@@ -291,7 +299,10 @@ func (r Report) Merge(other Report) Report {
 // potentially modifying them
 func (r *Report) WalkTopologies(f func(*Topology)) {
 	for _, name := range topologyNames {
-		f(r.topology(name))
+		topology := r.topology(name)
+		if topology != nil {
+			f(topology)
+		}
 	}
 }
 

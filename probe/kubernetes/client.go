@@ -37,6 +37,8 @@ type Client interface {
 	WalkStatefulSets(f func(StatefulSet) error) error
 	WalkCronJobs(f func(CronJob) error) error
 	WalkNamespaces(f func(NamespaceResource) error) error
+	WalkPersistentVolumes(f func(PersistentVolume) error) error
+	WalkPersistentVolumeClaims(f func(PersistentVolumeClaim) error) error
 
 	WatchPods(f func(Event, Pod))
 
@@ -264,6 +266,26 @@ func (c *client) WalkPods(f func(Pod) error) error {
 	for _, m := range c.podStore.List() {
 		pod := m.(*apiv1.Pod)
 		if err := f(NewPod(pod)); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (c *client) WalkPersistentVolumes(f func(PersistentVolume) error) error {
+	for _, m := range c.persistentVolumeStore.List() {
+		pv := m.(*apiv1.PersistentVolume)
+		if err := f(NewPersistentVolume(pv)); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (c *client) WalkPersistentVolumeClaims(f func(PersistentVolumeClaim) error) error {
+	for _, m := range c.persistentVolumeClaimStore.List() {
+		pvc := m.(*apiv1.PersistentVolumeClaim)
+		if err := f(NewPersistentVolumeClaim(pvc)); err != nil {
 			return err
 		}
 	}
