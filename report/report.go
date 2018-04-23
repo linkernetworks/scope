@@ -310,7 +310,10 @@ func (r *Report) WalkTopologies(f func(*Topology)) {
 // potentially modifying them.
 func (r *Report) WalkNamedTopologies(f func(string, *Topology)) {
 	for _, name := range topologyNames {
-		f(name, r.topology(name))
+		topology := r.topology(name)
+		if topology != nil {
+			f(name, topology)
+		}
 	}
 }
 
