@@ -87,6 +87,13 @@ func (p *pod) GetNode(probeID string) report.Node {
 		latests[IsInHostNetwork] = "true"
 	}
 
+	adjacencies := []string{}
+	for _, vol := range p.Pod.Spec.Volumes {
+		if vol.VolumeSource.PersistentVolumeClaim != nil {
+			adjacencies = append(adjacencies, vol.VolumeSource.PersistentVolumeClaim.ClaimName)
+		}
+	}
+
 	return p.MetaNode(report.MakePodNodeID(p.UID())).WithLatests(latests).
 		WithParents(p.parents).
 		WithLatestActiveControls(GetLogs, DeletePod)
