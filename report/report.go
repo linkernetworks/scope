@@ -378,11 +378,11 @@ func (r Report) Topology(name string) (Topology, bool) {
 // Validate checks the report for various inconsistencies.
 func (r Report) Validate() error {
 	var errs []string
-	for _, name := range topologyNames {
-		if err := r.topology(name).Validate(); err != nil {
+	r.WalkTopologies(func(topology *Topology) {
+		if err := topology.Validate(); err != nil {
 			errs = append(errs, err.Error())
 		}
-	}
+	})
 	if r.Sampling.Count > r.Sampling.Total {
 		errs = append(errs, fmt.Sprintf("sampling count (%d) bigger than total (%d)", r.Sampling.Count, r.Sampling.Total))
 	}
