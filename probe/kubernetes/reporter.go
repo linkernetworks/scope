@@ -400,9 +400,7 @@ func (r *Reporter) persistentVolumeClaimTopology() (report.Topology, []Persisten
 	})
 
 	err = r.client.WalkPersistentVolumes(func(p PersistentVolume) error {
-		for _, claim := range persistentVolumeClaims {
-			match(claim.Namespace(), claim.Selector(), report.PersistentVolumeClaim, "fooID")
-		}
+		result.AddNode(p.GetNode())
 		return nil
 	})
 
