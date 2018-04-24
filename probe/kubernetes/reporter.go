@@ -394,7 +394,7 @@ func (r *Reporter) persistentVolumeClaimTopology() (report.Topology, []Persisten
 		// fixme WithMetadataTemplates(PersistentVolumeClaimMetadataTemplates).
 		WithTableTemplates(TableTemplates)
 	err := r.client.WalkPersistentVolumeClaims(func(p PersistentVolumeClaim) error {
-		result.AddNode(p.GetNode(r.probeID))
+		result.AddNode(p.GetNode())
 		persistentVolumeClaims = append(persistentVolumeClaims, p)
 		return nil
 	})
