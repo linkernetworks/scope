@@ -252,6 +252,10 @@ func MakeReport() Report {
 			WithShape(Heptagon).
 			WithLabel("service", "services"),
 
+		PersistentVolumeClaim: MakeTopology().
+			WithShape(DottedCylinder).
+			WithLabel("persistent volume claim", "persistent volume claims"),
+
 		DNS: DNSRecords{},
 
 		Sampling: Sampling{},
@@ -363,6 +367,8 @@ func (r *Report) topology(name string) *Topology {
 		return &r.ECSService
 	case SwarmService:
 		return &r.SwarmService
+	case PersistentVolumeClaim:
+		return &r.PersistentVolumeClaim
 	}
 	return nil
 }
