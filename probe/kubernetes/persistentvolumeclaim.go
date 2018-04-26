@@ -17,7 +17,7 @@ const (
 type PersistentVolumeClaim interface {
 	Meta
 	Selector() labels.Selector
-	GetNode(probeID string) report.Node
+	GetNode() report.Node
 	GetStorageClass() string
 }
 
