@@ -2,11 +2,14 @@ package kubernetes
 
 import (
 	apiv1 "k8s.io/api/core/v1"
+
+	"github.com/weaveworks/scope/report"
 )
 
 // PersistentVolume represent kubernetes PersistentVolume interface
 type PersistentVolume interface {
 	Meta
+	GetNode() report.Node
 }
 
 // persistentVolume represents kubernetes persistent volume
@@ -21,12 +24,18 @@ func NewPersistentVolume(p *apiv1.PersistentVolume) PersistentVolume {
 }
 
 // GetNode returns Persistent Volume Claim as Node
-func (p *persistentVolumeClaim) GetNode() report.Node {
-	return p.MetaNode(report.MakePersistentVolumeNodeID(p.UID())).WithLatests(map[string]string{
+func (p *persistentVolume) GetNode() report.Node {
+	var parents report.Sets
+	latests := map[string]string{
 		NodeType:         "Persistent Volume",
 		Status:           string(p.Status.Phase),
-		VolumeName:       p.Spec.VolumeName,
+		StorageClassName: p.Spec.StorageClassName,
 		AccessModes:      string(p.Spec.AccessModes[0]),
-		StorageClassName: p.GetStorageClass(),
-	})
+	}
+	if p.Spec.ClaimRef != nil && p.Spec.ClaimRef.Kind == "" {
+		latests[VolumeClaim] = p.Spec.ClaimRef.Name
+		id := report.MakePersistentVolumeClaimNodeID(string(p.Spec.ClaimRef.UID))
+		parents = parents.Add(report.PersistentVolumeClaim, report.MakeStringSet(id))
+	}
+	return p.MetaNode(report.MakePersistentVolumeNodeID(p.UID())).WithLatests(latests).WithParents(parents)
 }
