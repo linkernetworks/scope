@@ -22,7 +22,7 @@ import (
 
 var (
 	longPollTime       = aws.Int64(10)
-	rpcTimeout         = time.Minute
+	rpcTimeout         = time.Second * 25
 	sqsRequestDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
 		Namespace: "scope",
 		Name:      "sqs_request_duration_seconds",
